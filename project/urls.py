@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import permissions
+from rest_framework import permissions, routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+from article.urls import article_router
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -32,9 +34,13 @@ schema_view = get_schema_view(
    permission_classes=[permissions.AllowAny],
 )
 
+router = routers.DefaultRouter()
+router.registry.extend(article_router.registry)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/', include(router.urls)),
 ]
 
