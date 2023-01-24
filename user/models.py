@@ -8,6 +8,7 @@ from user.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    avatar = models.ImageField(upload_to="uploads/avatars/", null=True)
     email = models.EmailField(_("email address"), unique=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     is_active = models.BooleanField(
@@ -22,8 +23,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
-
     objects = UserManager()
+    code = models.CharField(max_length=4, null=True)
 
     class Meta:
         verbose_name = _("user")
